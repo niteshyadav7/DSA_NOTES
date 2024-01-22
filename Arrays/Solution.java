@@ -60,6 +60,9 @@ public class Solution {
 
   int[] prefixSumWithQuery(int A[], int B[][]) {
     /**
+     * 
+     * MOST-IMPORTANT FORMULA:sum(e,s)=pf[e]-pf[s-1]******************
+     * 
      * Return the Array of query sum
      * Firstly create the prefix sum.
      * Then calculate the left and right values.
@@ -83,5 +86,68 @@ public class Solution {
       }
     }
     return ans;
+  }
+
+  int specialIndex(int A[]) {
+    /**
+     * [4 ,3 ,2 ,7 ,6 ,7,2] Search Wheater special Index exist or not. i.e After
+     * removing the i-th index sum of Even and Odd Index are equal than return true
+     * .
+     * Algorithm : we observe that after removing the i-th idx ::Before :: Odd and
+     * even are as it is. But after removing i-th odd index became the even and even
+     * became the odd.
+     * 
+     * Steps:Firsty create the odd and even prefix sum .
+     * pfe=[4,4,6,6,12,12,14] And pfo=[0,3,3,10,10,17,17] Suppose we remove A[]
+     * index 3.
+     * pfe(i-1)to pfe(0) ==>pf[e]-pfe(s) where s=0 and e=i-1.
+     * 
+     * sum of even =(pfe[i-1]-0)+(pfo[n]-pfo[i+1-1])
+     * sum of odd =(pfo[i-1]-0)+(pfe[n]-pfe[i+1-1])
+     */
+    int temp = 0;
+    int n = A.length;
+    int prefixSumEven[] = new int[n];
+    int prefixSumOdd[] = new int[n];
+
+    // Now creating the prefix sum of even .
+    prefixSumEven[0] = A[0];
+    for (int i = 1; i < n; i++) {
+      if (i % 2 == 0) {
+        prefixSumEven[i] = prefixSumEven[i - 1] + A[i];
+      } else {
+        prefixSumEven[i] = prefixSumEven[i - 1];
+      }
+    }
+    // Now creating the prefix sum of odd.
+    prefixSumOdd[0] = 0;
+    for (int i = 1; i < n; i++) {
+      if (i % 2 != 0) {
+        prefixSumOdd[i] = prefixSumOdd[i - 1] + A[i];
+      } else {
+        prefixSumOdd[i] = prefixSumOdd[i - 1];
+      }
+    }
+    // Now checking the value.
+    for (int i = 0; i < n; i++) {
+      int evenSum = 0;
+      int oddSum = 0;
+      if (i == 0) {
+        evenSum = prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
+        oddSum = prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
+      } else if (i == n - 1) {
+        oddSum = prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
+        evenSum = prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
+      } else {
+        evenSum = prefixSumEven[i - 1] + prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
+        oddSum = prefixSumOdd[i - 1] + prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
+      }
+      if (evenSum == oddSum)
+        temp++;
+    }
+
+    printArray(prefixSumEven);
+    printArray(prefixSumOdd);
+    return temp;
   }
 }
