@@ -135,9 +135,6 @@ public class Solution {
       if (i == 0) {
         evenSum = prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
         oddSum = prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
-      } else if (i == n - 1) {
-        oddSum = prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
-        evenSum = prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
       } else {
         evenSum = prefixSumEven[i - 1] + prefixSumOdd[n - 1] - prefixSumOdd[i + 1 - 1];
         oddSum = prefixSumOdd[i - 1] + prefixSumEven[n - 1] - prefixSumEven[i + 1 - 1];
